@@ -15,13 +15,15 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class User {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
     private String username;
+
+    @Column(nullable = false)
+    private String password;
 
     @Column(nullable = false)
     private String email;
@@ -29,11 +31,19 @@ public class User {
     private LocalDateTime lastLogin;
 
     @CreatedDate
-    @Column
+    @Column(insertable = true)
     private LocalDateTime createdDate;
 
     @LastModifiedDate
-    private LocalDateTime updateDate;
+    private LocalDateTime updatedDate;
 
+    @PrePersist
+    protected void onCreate() {
+        this.createdDate = LocalDateTime.now();
+    }
 
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedDate = LocalDateTime.now();
+    }
 }
